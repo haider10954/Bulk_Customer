@@ -141,7 +141,7 @@
                         <div class="mb-3">
 
                             <label class="form-label">Upload Excel</label>
-                            <input type="file" name="excel_file" id="excel_file" class="form-control" accept="xls,xlxs">
+                            <input type="file" name="excel_file" id="excel_file" class="form-control" accept="xls,xlsx">
                         </div>
 
                         <div class="mb-3">
