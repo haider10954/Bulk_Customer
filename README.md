@@ -5,7 +5,7 @@ Bulk Customer Update & Assign Application
 </h1>
 
 This application allows the admin to manage customers and assign them to users in bulk. The admin can create, update, and delete users, as well as import customers from an Excel file and assign them to selected users.
-I have used Hybrix Template to Design this System
+I have used Hybrix Template to Design this System. Dummy data excel file is also added in Repo name as Customer.xlsx
 
 ## Features
 
