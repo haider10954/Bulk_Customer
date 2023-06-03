@@ -47,6 +47,7 @@ To import customers, the Excel file should have the following fields:
 3. Configure the database connection in the .env file.
 4. Run the database migrations: php artisan migrate.
 5. Start the development server: php artisan serve.
+6. If composer i gives error for excel package please run composer require maatwebsite/excel -W --ignore-platform-req=ext-zip
 
 ## Test Credentials
 
