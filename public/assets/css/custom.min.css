@@ -1,0 +1,14 @@
+
+/*# sourceMappingURL=custom.min.css.map */
+
+.img-view{
+    height: 100px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+#noRecordMsg {
+    display: none;
+    color: black;
+}
