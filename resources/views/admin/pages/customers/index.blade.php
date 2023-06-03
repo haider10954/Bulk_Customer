@@ -2,6 +2,7 @@
 
 @section('title','Customers')
 
+
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -24,7 +25,10 @@
             <div class="card">
                 <div class="card-header align-items-center d-flex gap-1">
                     <h4 class="card-title mb-0 flex-grow-1">All Customers</h4>
-                    <a href="{{ route('create.customer') }}" class="btn btn-primary"><i class="bx bx-plus me-2"></i>Add Customer</a>
+                    <a href="{{ route('create.customer') }}" class="btn btn-primary"><i class="bx bx-plus me-2"></i>Add
+                        Customer</a>
+                    <a data-bs-toggle="modal" data-bs-target="#importCustomersModal" class="btn btn-primary"><i
+                            class="bx bx-plus me-2"></i>Import Customers</a>
                 </div><!-- end card header -->
                 <div class="prompt"></div>
                 <div class="card-body">
@@ -34,6 +38,7 @@
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Assigned User</th>
+                                <th scope="col">Customer Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">phone</th>
                                 <th scope="col">Action</th>
@@ -47,6 +52,7 @@
                                             <a class="fw-medium link-primary">#{{ $loop->index+1 }}</a>
                                         </td>
 
+                                        <td>{{  $user->getAssignedUser->name  }}</td>
                                         <td>
                                             <div class="flex-grow-1">{{$user->name}}</div>
                                         </td>
@@ -119,16 +125,87 @@
             </div>
         </div>
     </div>
+
+    <!-- Import Customers Modal -->
+    <div class="modal fade" id="importCustomersModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Import Customers</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="importCustomersRequest">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+
+                            <label class="form-label">Upload Excel</label>
+                            <input type="file" name="excel_file" id="excel_file" class="form-control" accept="xls,xlxs">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Select User</label>
+                            <select name="users[]" multiple class="form-control">
+                                <option value="all">Select All</option>
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="submitDelForm" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('custom-scripts')
+
     <script>
+
+
+        $("#importCustomersRequest").on('submit', function (e) {
+            e.preventDefault();
+            var formData = new FormData($("#importCustomersRequest")[0]);
+            $.ajax({
+                type: "POST",
+                url: "{{ route('import.customer') }}",
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                cache: false,
+                data: formData,
+                beforeSend: function () {
+                    $("#submitDelForm").prop('disabled', true);
+                    $("#submitDelForm").html('<i class="fa fa-spinner fa-spin me-1"></i> Processing');
+                },
+                success: function (res) {
+                    if (res.success == true) {
+                        $('#importCustomersModal').modal('hide');
+                        $('.prompt').html('<div class="alert alert-success mb-3">' + res.message + '</div>');
+                        window.location.reload();
+                    } else {
+                        alert('fail')
+                    }
+                },
+                error: function (e) {
+                }
+            });
+        });
+
         function deleteUser(id) {
             $('#customer_id').val(id);
         }
 
         $("#deleteUserRecord").on('submit', function (e) {
             e.preventDefault();
+
             $.ajax({
                 type: "POST",
                 url: "{{ route('delete.customer') }}",

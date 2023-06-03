@@ -45,6 +45,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/customer/edit', [\App\Http\Controllers\admin\CustomerController::class, 'edit'])->name('customer.edit');
         Route::post('/customer/delete', [\App\Http\Controllers\admin\CustomerController::class, 'delete_customer'])->name('delete.customer');
 
+        // Import Customer
+        Route::post('/import-customers',[\App\Http\Controllers\admin\CustomerController::class , 'importCustomer'])->name('import.customer');
     });
 
 });

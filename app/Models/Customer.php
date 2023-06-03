@@ -11,7 +11,8 @@ class Customer extends Model
 
     protected  $guarded = [];
 
-    public function getUser()
+
+    public function getAssignedUser()
     {
         return $this->hasOne(User::class , 'id' , 'user_id');
     }

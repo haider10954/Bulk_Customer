@@ -33,6 +33,7 @@
                             <thead class="table-light">
                             <tr>
                                 <th scope="col">User ID</th>
+                                <th scope="col">Assigned Customers</th>
                                 <th scope="col">User Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Action</th>
@@ -45,51 +46,55 @@
                                         <td>
                                             <a class="fw-medium link-primary">#{{ $loop->index+1 }}</a>
                                         </td>
+                                        <td>
+                                            {{ $user->getAssignedCustomers->isNotEmpty() ? implode(',', $user->getAssignedCustomers->pluck('name')->toArray()) : 'No Customer Assigned Yet ' }}
+                                        </td>
 
                                         <td>
                                             <div class="flex-grow-1">{{$user->name}}</div>
-                    </div>
-                    </td>
-                    <td>
-                        {{$user->email}}
-                    </td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <a href="{{ route('edit_user',$user->id) }}" class="btn btn-soft-success"><i
-                                    class="bx bx-edit"></i></a>
-                            <button class="btn btn-soft-danger" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop"
-                                    onclick="deleteUser('{{$user->id}}')"><i
-                                    class="bx bx-trash"></i></button>
-                        </div>
-                    </td>
-                    </tr><!-- end tr -->
-                    @endforeach
-                    @else
-                        <tr>
-                            <td colspan="6">
-                                <div class="text-center mt-3 mb-3">
-                                    No Record Found
-                                </div>
-                            </td>
 
-                        </tr>
-                        @endif
+                                        </td>
+                                        <td>
+                                            {{$user->email}}
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ route('edit_user',$user->id) }}"
+                                                   class="btn btn-soft-success"><i
+                                                        class="bx bx-edit"></i></a>
+                                                <button class="btn btn-soft-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#staticBackdrop"
+                                                        onclick="deleteUser('{{$user->id}}')"><i
+                                                        class="bx bx-trash"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr><!-- end tr -->
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="text-center mt-3 mb-3">
+                                            No Record Found
+                                        </div>
+                                    </td>
 
-                        </tbody>
+                                </tr>
+                            @endif
+
+                            </tbody>
 
                         </table>
                         <div class="text-center mt-3 mb-3" id="noRecordMsg">No records found.</div>
+                    </div>
+
+
+                    <div class="row align-items-center mt-4 pt-2 gy-2 text-center text-sm-start">
+                        {{ $users->links('vendor.pagination.bootstrap-5') }}
+                    </div>
+
                 </div>
-
-
-                <div class="row align-items-center mt-4 pt-2 gy-2 text-center text-sm-start">
-                    {{ $users->links('vendor.pagination.bootstrap-5') }}
-                </div>
-
             </div>
         </div>
-    </div>
     </div>
 
 

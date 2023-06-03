@@ -7,13 +7,16 @@ use App\Http\Requests\AddCustomerRequest;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
     public function  index ()
     {
         $customer = Customer::query()->latest()->paginate('10');
-        return view('admin.pages.customers.index',compact('customer'));
+        $users = User::get();
+        return view('admin.pages.customers.index',compact('customer','users'));
     }
 
     public  function  create_customer_view()
@@ -86,5 +89,61 @@ class CustomerController extends Controller
             'success' => true,
             'message' => 'Customer Record Deleted',
         ]);
+    }
+
+    public function importCustomer(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls',
+            'users' => 'required|array',
+        ]);
+
+        $getAllUser = User::query()->pluck('id');
+
+
+        $file = $request->file('excel_file');
+        $users = $request->input('users');
+        if($users[0] == 'all')
+        {
+            $users = $getAllUser;
+        }
+
+        // Read the Excel file and get the customer data
+        $data = Excel::toArray([], $file)[0];
+
+        $totalCustomers = count($data);
+        $totalUsers = count($users);
+
+        $customersPerUser = (int) ($totalCustomers / $totalUsers);
+
+        // Assign customers to users
+        $assignedCustomers = collect($data)->map(function ($row, $index) use ($users, $customersPerUser) {
+            $userId = $users[$index % count($users)];
+            return [
+                'name' => $row[0],
+                'email' => $row[2],
+                'phone' => $row[1],
+                'user_id' => $userId,
+            ];
+        });
+
+        // Save the assigned customers to the db
+        DB::beginTransaction();
+        try {
+            foreach ($assignedCustomers as $customer) {
+                Customer::create($customer);
+            }
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'All Customers are imported successfully'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went Wrong'
+            ]);
+        }
     }
 }

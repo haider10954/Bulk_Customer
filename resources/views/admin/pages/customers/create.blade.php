@@ -22,7 +22,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex gap-1">
-                    <h4 class="card-title mb-0 flex-grow-1">Create User</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Create Customer</h4>
                 </div>
                 <div class="card-body">
                     <div class="prompt"></div>
@@ -33,7 +33,7 @@
                                 <div class="mb-3">
                                     <label  class="form-label">User Name</label>
                                     <input type="text" class="form-control"  name="user_name"
-                                           placeholder="Enter User Name">
+                                           placeholder="Enter User Name" required>
                                 </div>
 
                             </div><!-- end col -->
@@ -42,7 +42,7 @@
                                 <div class="mb-3">
                                     <label for="cleave-delimiter" class="form-label">Email</label>
                                     <input type="email" class="form-control"  name="email"
-                                           placeholder="Enter User Email">
+                                           placeholder="Enter User Email" required>
                                 </div>
                             </div><!-- end col -->
 
@@ -50,13 +50,13 @@
                                 <div class="mb-3">
                                     <label for="cleave-delimiter" class="form-label">Phone</label>
                                     <input type="number" class="form-control"  name="phone"
-                                           placeholder="Enter Phone Number">
+                                           placeholder="Enter Phone Number" required>
                                 </div>
                             </div><!-- end col -->
                             <div class="col-xl-6">
                                 <div class="mb-3">
                                     <label for="cleave-delimiter" class="form-label">Assign User</label>
-                                    <select class="form-control" name="user_id">
+                                    <select class="form-control" name="user_id" required>
                                         <option value="">Select User</option>
                                         @foreach($user as $item)
                                             <option value="{{$item->id}}">{{$item->name}}</option>

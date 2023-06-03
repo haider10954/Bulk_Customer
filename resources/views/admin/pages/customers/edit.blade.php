@@ -22,7 +22,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex gap-1">
-                    <h4 class="card-title mb-0 flex-grow-1">Edit User</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Edit Customer</h4>
                 </div>
                 <div class="card-body">
                     <div class="prompt"></div>
